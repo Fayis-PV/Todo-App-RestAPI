@@ -11,3 +11,7 @@ from rest_framework.permissions import AllowAny
 class TodoListView(ListCreateAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
+
+class TodoDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
