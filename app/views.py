@@ -4,13 +4,10 @@ from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView,
 from .models import Todo
 from .serializers import TodoSerializer
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 # Home Page
-class IndexListView(ListAPIView):
+class IndexListView(ListCreateAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
-    def get(self,request):
-        data = self.queryset
-        print(data)
-        return Response(data=data,status=status.HTTP_200_OK)   
