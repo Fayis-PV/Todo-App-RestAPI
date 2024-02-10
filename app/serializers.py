@@ -3,7 +3,7 @@ from .models import Todo
 
 # Create Here serializers
 min_choices = (
-    (0 , 'Don\'t inform'),
+    (0 , 'Don\'t inform me'),
     (1 , '1 Minute before'),
     (2 , '2 Minutes before'),
     (3 , '3 Minutes before'),
