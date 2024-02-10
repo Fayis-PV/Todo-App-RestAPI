@@ -8,6 +8,6 @@ from rest_framework.permissions import AllowAny
 
 # Create your views here.
 # Home Page
-class IndexListView(ListCreateAPIView):
+class TodoListView(ListCreateAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
