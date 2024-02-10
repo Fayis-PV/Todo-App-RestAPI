@@ -4,7 +4,6 @@ from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView,
 from .models import Todo
 from .serializers import TodoSerializer
 from rest_framework import status
-from rest_framework.permissions import AllowAny
 
 # Create your views here.
 # Home Page

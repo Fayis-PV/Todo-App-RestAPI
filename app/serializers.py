@@ -14,8 +14,17 @@ min_choices = (
     (60, '1 Hour before')
 )
 
+# Create your serializers here.
+# set email as user email and not to be editable
 class TodoSerializer(serializers.ModelSerializer):
-    inform_before = serializers.ChoiceField(min_choices)
+    email = serializers.EmailField(read_only = True)
+    inform_before = serializers.ChoiceField(choices = min_choices)
     class Meta:
         model = Todo
-        fields ='__all__'
+        fields = '__all__'
+        read_only_fields = ['email']
+    
+    def create(self, validated_data):
+        validated_data['email'] = self.context['request'].user.email
+        return super().create(validated_data)
+    
