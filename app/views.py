@@ -74,6 +74,7 @@ class TodoIncompleteView(RetrieveAPIView):
             return HttpResponseRedirect(reverse('home'))
         
 
+# Send notification mail to user before inform_before time from the end time of the todo if the todo is not completed and if end time is available
 class SendNotification(CreateAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
