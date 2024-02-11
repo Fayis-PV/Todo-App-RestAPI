@@ -18,7 +18,9 @@ min_choices = (
 # set email as user email and not to be editable
 class TodoSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
+    user = serializers.CharField(read_only= True)
     inform_before = serializers.ChoiceField(choices = min_choices)
+    completed = serializers.BooleanField(read_only = True)
     class Meta:
         model = Todo
         fields = '__all__'
@@ -26,5 +28,8 @@ class TodoSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data['email'] = self.context['request'].user.email
+        validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
+    
+    # check for status when returning
     
