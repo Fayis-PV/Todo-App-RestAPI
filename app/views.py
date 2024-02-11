@@ -33,5 +33,19 @@ class TodoDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = TodoSerializer
 
 
+class TodoCompleteView(RetrieveAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
+
+    def get(self, request, pk, *args, **kwargs):
+        todo = Todo.objects.get(id = pk)
+        if todo.user == request.user:
+            todo.completed = True
+            todo.save()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        return HttpResponseRedirect(reverse('home'))
+    
+
     
 

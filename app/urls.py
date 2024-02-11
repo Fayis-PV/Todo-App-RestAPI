@@ -6,5 +6,6 @@ urlpatterns = [
     #home url
     path('', TodoListView.as_view() , name = 'home'),
     path('todo/<int:pk>', TodoDetailView.as_view(), name = 'todo_detail'),
+    path('todo/<int:pk>/complete', TodoCompleteView.as_view(), name = 'todo_complete'),
 
 ]
