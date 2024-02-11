@@ -1,16 +1,36 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your models here.
 class CustomUser(AbstractUser):
     # make email unique and username not unique but required
     email = models.EmailField(unique = True)
-    username = models.CharField(max_length=100, unique = True)
+    username = models.CharField(max_length=100, unique = False, validators = [])
     REQUIRED_FIELDS = ['username']
     USERNAME_FIELD = 'email'
 
     def __str__(self):
         return self.username
+    
+    
+    # check unique username on signup
+    def check_username(self,username):
+        try:
+            user = CustomUser.objects.get(username = username)
+            print(user.username)
+            return Response({'username': 'Username already exists'}, status = status.HTTP_400_BAD_REQUEST)
+        except CustomUser.DoesNotExist:
+            return True
+        
+    def check_email(self,email):
+        try:
+            user = CustomUser.objects.get(email = email)
+            return Response({'email': 'Email already exists'}, status = status.HTTP_400_BAD_REQUEST)
+        except CustomUser.DoesNotExist:
+            return True
+    
     
     def get_username(self,email):
         user = CustomUser.objects.get(email = email)
