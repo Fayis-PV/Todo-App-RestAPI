@@ -46,6 +46,16 @@ class TodoCompleteView(RetrieveAPIView):
             return Response(status = status.HTTP_403_FORBIDDEN)
         return HttpResponseRedirect(reverse('home'))
     
+class TodoDeleteView(DestroyAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
 
+    def delete(self, request, pk, *args, **kwargs):
+        todo = Todo.objects.get(id = pk)
+        if todo.user == request.user:
+            todo.delete()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        return HttpResponseRedirect(reverse('home'))
     
 
