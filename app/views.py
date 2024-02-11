@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView,RetrieveUpdateDestroyAPIView,DestroyAPIView,RetrieveAPIView
+from rest_framework.generics import ListCreateAPIView,CreateAPIView,RetrieveUpdateDestroyAPIView,DestroyAPIView,RetrieveAPIView
 from .models import Todo, CustomUser
 from .serializers import TodoSerializer
 from rest_framework import status
@@ -8,6 +8,8 @@ from allauth.account.views import ConfirmEmailView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from rest_framework.permissions import AllowAny
+from datetime import timedelta
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -70,5 +72,21 @@ class TodoIncompleteView(RetrieveAPIView):
             else:
                 return Response(status=status.HTTP_403_FORBIDDEN)
             return HttpResponseRedirect(reverse('home'))
+        
 
+class SendNotification(CreateAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
 
+    def post(self, request, *args, **kwargs):
+        todos = Todo.objects.all()
+        for todo in todos:
+            if todo.completed == False and todo.end != None:
+                # send mail to user
+                time_to_inform = todo.end - timedelta(minutes = todo.inform_before)
+                sender = 'fayispvchelari@gmail.com'
+                receiver = todo.email
+                subject = 'Notification for Todo'
+                message = f'Your Todo {todo.title} is about to end in {todo.inform_before} minutes'
+                send_mail(subject, message, sender, [receiver])
+        return Response(status = status.HTTP_200_OK)
