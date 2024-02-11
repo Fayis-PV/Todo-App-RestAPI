@@ -1,12 +1,23 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView,RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView,RetrieveUpdateDestroyAPIView,DestroyAPIView,RetrieveAPIView
 from .models import Todo, CustomUser
 from .serializers import TodoSerializer
 from rest_framework import status
-
+from allauth.account.views import ConfirmEmailView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
+
+class CustomConfirmEmailView(ConfirmEmailView):
+    permission_classes = [AllowAny]
+    def get(self, *args, **kwargs):
+        self.object = confirmation = self.get_object()
+        confirmation.confirm(self.request)
+        return HttpResponseRedirect('/auth/login/')  # Redirect to a custom URL after email verification
+
 # Home Page
 class TodoListView(ListCreateAPIView):
     queryset = Todo.objects.all()
@@ -14,10 +25,13 @@ class TodoListView(ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        customuser = CustomUser
         todo = Todo.objects.filter(user = user)
         return todo
 
 class TodoDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
+
+
+    
+

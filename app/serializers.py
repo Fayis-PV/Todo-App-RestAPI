@@ -20,7 +20,6 @@ class TodoSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
     user = serializers.CharField(read_only= True)
     inform_before = serializers.ChoiceField(choices = min_choices)
-    completed = serializers.BooleanField(read_only = True)
     class Meta:
         model = Todo
         fields = '__all__'

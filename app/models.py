@@ -6,7 +6,7 @@ class CustomUser(AbstractUser):
     # make email unique and username not unique but required
     email = models.EmailField(unique = True)
     username = models.CharField(max_length=100, unique = True)
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
     USERNAME_FIELD = 'email'
 
     def __str__(self):
