@@ -26,7 +26,7 @@ class TodoSerializer(serializers.ModelSerializer):
         read_only_fields = ['email']
     
     def create(self, validated_data):
-        validated_data['email'] = self.context['request'].user.email
-        validated_data['user'] = self.context['request'].user
+        validated_data['email'] = validated_data['user'].email
+        validated_data['user'] = validated_data['user']
         return super().create(validated_data)
     
