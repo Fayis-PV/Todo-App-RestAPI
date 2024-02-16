@@ -14,6 +14,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
     
+    
     # check unique username on signup
     def check_username(self,username):
         try:
